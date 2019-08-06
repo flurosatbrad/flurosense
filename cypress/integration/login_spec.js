@@ -1,17 +1,7 @@
 import name from 'random-username-generator';
+import {login, logout} from '../fixtures/common';
 
 describe('Login', ()=>{
-
-    const common={
-        login: () =>{
-            cy.visit(Cypress.env('baseUrl'));
-            cy.contains('Login').click();
-            cy.get('#login-email', {timeout:60000}).type(Cypress.env('correctEmail'));
-            cy.get('#login-password').type(Cypress.env('correctPassword'))
-            cy.get('.fluro-auth__login-btn').click();
-        },
-        logout: ()=>cy.get('#mini-menu-log-out').click()
-    }
 
     it('should show a error message if incorrect email or password', ()=>{
         cy.visit(Cypress.env('baseUrl'));
@@ -38,22 +28,22 @@ describe('Login', ()=>{
         cy.contains('This email address is already registered').should('be.visible')
     })
 
-    it('should successfully create a new user',()=>{
+    // it('should successfully create a new user',()=>{
         
-    })
+    // })
 
 
     it('should login correctly with email and password logout to sign in page',()=>{
-        common.login();
+        login();
         cy.url().should('contain', 'app/maps');
-        common.logout();
+        logout();
         cy.url().should('contain','app/login');
     
     })
     
     
     it('should login correctly with email and password and create a farm', ()=>{
-        common.login();
+        login();
         cy.contains('Add Farm').click();
         let randomName = name.generate();
         cy.get('input#group-name').type(randomName);
@@ -64,12 +54,12 @@ describe('Login', ()=>{
         cy.get('#map__select-farm').should('have.attr','title', randomName);
         cy.get('#map__select-farm').click();
         cy.get('#map__select-farm-menu-list').contains(randomName).should('exist')
-        common.logout();
+        logout();
     })
 
     
     it('should correctly login with email and password and create a field using KML files',()=>{
-        common.login();
+        login();
         cy.get('#map__select-farm').click();
         cy.contains('Farm No 22').click();
         cy.contains('Add field').click();
@@ -81,12 +71,12 @@ describe('Login', ()=>{
         });    
         cy.get('#kml-name').should('have.attr', 'value','/kml/23 TOP PD')
         cy.wait(3000);
-        common.logout();
+        logout();
       
     })
 
     it ('should correclty login with email and password and create a field using draw function', ()=>{
-        common.login();
+        login();
         cy.get('#map__select-farm').click();
         cy.contains('Farm No 22').click();
         cy.contains('Add field').click();
@@ -107,7 +97,7 @@ describe('Login', ()=>{
         cy.wait(3000)
         cy.contains(randomName).should('be.visible')
         cy.wait(3000);
-        common.logout();
+        logout();
     })
         
 })
