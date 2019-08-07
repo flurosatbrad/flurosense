@@ -6,7 +6,7 @@ const common={
         cy.get('#login-password').type(Cypress.env('correctPassword'))
         cy.get('.fluro-auth__login-btn').click();
     },
-    logout: ()=>cy.get('#mini-menu-log-out').click()
+    logout: ()=>cy.get('#mini-menu-log-out').click({force:true})
 }
 
 export default common;

@@ -1,4 +1,3 @@
-import name from 'random-username-generator';
 import {login, logout} from '../fixtures/common';
 
 describe('Login', ()=>{
@@ -28,79 +27,19 @@ describe('Login', ()=>{
         cy.contains('This email address is already registered').should('be.visible')
     })
 
-    // it('should successfully create a new user',()=>{
+    it('should successfully create a new user',()=>{
         
-    // })
+    })
 
 
-    it('should login correctly with email and password logout to sign in page',()=>{
+    it('should logout to sign in page',()=>{
         login();
-        cy.url().should('contain', 'app/maps');
+        cy.url().should('not.contain', 'app/login');
         logout();
         cy.url().should('contain','app/login');
     
     })
-    
-    
-    it('should login correctly with email and password and create a farm', ()=>{
-        login();
-        cy.contains('Add Farm').click();
-        let randomName = name.generate();
-        cy.get('input#group-name').type(randomName);
-        cy.contains('Save').click();
-        cy.contains('Success').should('be.visible');
-        cy.wait(4000);
-        cy.get('.farm-feature__name', {timeout: 60000}).should('have.text', randomName);
-        cy.get('#map__select-farm').should('have.attr','title', randomName);
-        cy.get('#map__select-farm').click();
-        cy.get('#map__select-farm-menu-list').contains(randomName).should('exist')
-        logout();
-    })
-
-    
-    it('should correctly login with email and password and create a field using KML files',()=>{
-        login();
-        cy.get('#map__select-farm').click();
-        cy.contains('Farm No 22').click();
-        cy.contains('Add field').click();
-     
-        //Use cypress-file-upload npm package to simulate file upload
-        const fileName = '/kml/23 TOP PD.kml';
-        cy.fixture(fileName).then(fileContent => {
-            cy.get('#map-up-kml').upload({ fileContent , fileName, mimeType: 'application/vnd.google-earth.kml+xml', encoding:'utf8' });
-        });    
-        cy.get('#kml-name').should('have.attr', 'value','/kml/23 TOP PD')
-        cy.wait(3000);
-        logout();
-      
-    })
-
-    it ('should correclty login with email and password and create a field using draw function', ()=>{
-        login();
-        cy.get('#map__select-farm').click();
-        cy.contains('Farm No 22').click();
-        cy.contains('Add field').click();
-        cy.contains('Draw Fields').click();
-        cy.get('#fluro-map')
-        .trigger('pointerdown',{x:450,y:100})
-        .trigger('pointerup')
-        .trigger('pointerdown', {x:500, y:200})
-        .trigger('pointerup')
-        .trigger('pointerdown', {x:100, y:300})
-        .trigger('pointerup')
-        .trigger('pointerdown', {x:450, y:100})
-        let randomName = name.generate();
-        cy.get('#kml-name').clear().type(randomName)
-        cy.contains('Save fields').click();
-        cy.contains('Success').should('be.visible');
-        //wait for Success message to hide to test if name is present.
-        cy.wait(3000)
-        cy.contains(randomName).should('be.visible')
-        cy.wait(3000);
-        logout();
-    })
-        
+            
 })
     
-    
-    //'Add Farm' button should have a unique identifier, same with 'Login' and 'Sign up' buttons on landing page.
+  
