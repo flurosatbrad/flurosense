@@ -2,25 +2,21 @@ import name from 'random-username-generator';
 import {login, logout} from '../fixtures/common';
 
 describe('basic creating farms, fields, crop allocation',()=>{
+    
     it('should login correctly with email and password and create a farm', ()=>{
         login();
-        if(cy.url().contains('admin')){
-        }else{
-            
-                        cy.contains('Add Farm').click();
-                        let randomName = name.generate();
-                        cy.get('input#group-name').type(randomName);
-                        cy.contains('Save').click();
-                        cy.contains('Success').should('be.visible');
-                        cy.wait(2000);
-                        cy.get('.farm-feature__name', {timeout: 60000}).should('have.text', randomName);
-                        cy.get('#map__select-farm').should('have.attr','title', randomName);
-                        cy.get('#map__select-farm').click();
-                        cy.get('#map__select-farm-menu-list').contains(randomName).should('exist');
-                        cy.get('.no-fields-select').should('have.text', 'No fields')
-                        logout();
-
-        }
+        cy.contains('Add Farm').click();
+        let randomName = name.generate();
+        cy.get('input#group-name').type(randomName);
+        cy.contains('Save').click();
+        cy.contains('Success').should('be.visible');
+        cy.wait(2000);
+        cy.get('.farm-feature__name', {timeout: 60000}).should('have.text', randomName);
+        cy.get('#map__select-farm').should('have.attr','title', randomName);
+        cy.get('#map__select-farm').click();
+        cy.get('#map__select-farm-menu-list').contains(randomName).should('exist');
+        cy.get('.no-fields-select').should('have.text', 'No fields')
+        logout();
     })
 
     
