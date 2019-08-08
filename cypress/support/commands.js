@@ -24,4 +24,21 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import 'cypress-file-upload';
+import "cypress-file-upload";
+
+Cypress.Commands.add('gotoFlurosat', ()=>{
+    cy.visit('https://staging.flurosat.com/');
+})
+
+Cypress.Commands.add("login", () => {
+  cy.request({
+    method: "POST",
+    url: "https://staging.flurosat.com/api/v1/login",
+    body: { email: "brad@flurosat.com", password: "password" }
+  }).then(response => {
+    window.localStorage.setItem("jwt", response.body.result.token);
+  });
+});
+
+
+
