@@ -34,11 +34,13 @@ Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
     url: "https://staging.flurosat.com/api/v1/login",
-    body: { email: "brad@flurosat.com", password: "password" }
+    body: { email: Cypress.env('login').correctEmail, password: Cypress.env('login').correctPassword }
   }).then(response => {
     window.localStorage.setItem("jwt", response.body.result.token);
   });
 });
 
 
-
+Cypress.Commands.add('logout', ()=>{
+    cy.get('#mini-menu-log-out').click({force:true})
+})
