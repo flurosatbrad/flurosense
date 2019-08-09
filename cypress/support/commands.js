@@ -45,20 +45,25 @@ Cypress.Commands.add('logout', ()=>{
     cy.get('#mini-menu-log-out').click({force:true})
 })
 
+
+//for draw function, get random location out of ten returned my openstreetmap.
 Cypress.Commands.add('randomLocation', ()=>{
-    const words= ['hello', 'farm', 'fluro', 'ball', 'water'];
-    let locationArrayLength = words.length;
-    let randomIndexNumber = Math.floor(Math.random()* locationArrayLength);
-    let myLocation = words[randomIndexNumber];
-    return myLocation;
+    cy.request({
+      method:"GET",
+      url:"https://nominatim.openstreetmap.org/search?format=json&q=hello",
+    })
+    .then((res)=>{
+      let randomIndex = Math.floor(Math.random()*10);
+      return res.body[randomIndex];
+    })
 })
 
-Cypress.Commands.add('generate_random_string', (string_length) => { 
-  let random_string = '';
-  let random_ascii;
-  for(let i = 0; i < string_length; i++) {
-      random_ascii = Math.floor((Math.random() * 25) + 97);
-      random_string += String.fromCharCode(random_ascii)
-  }
-  return random_string
- });
+
+//To select a farm.  When log as admin, unable to add farm straight away without selecting an existing farm first
+Cypress.Commands.add('selectFarm',()=>{
+  cy.visit("/app/admin/maps/136");
+  cy.get("#map__select-farm", { timeout: 60000 })
+    .click()
+    .type("demo");
+  cy.contains("1_Demo").click();
+})
